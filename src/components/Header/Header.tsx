@@ -1,10 +1,25 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import FiberManualRecordTwoToneIcon from "@mui/icons-material/FiberManualRecordTwoTone";
 
 const Header = () => {
   return (
     <>
-      <h1>Navbar</h1>
+      <AppBar position="static" color="transparent">
+        <Toolbar>
+          <Typography
+            component={Link}
+            to="/"
+            variant="h5"
+            color="primary"
+            sx={{ flexGrow: 1, textDecoration: "none", fontWeight: 600 }}
+          >
+            Podcaster
+          </Typography>
+          <FiberManualRecordTwoToneIcon color="primary" />
+        </Toolbar>
+      </AppBar>
       <Outlet />
     </>
   );
