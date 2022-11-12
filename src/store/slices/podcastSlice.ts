@@ -38,7 +38,7 @@ export const podcastSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state = { ...initialState };
+      state.topPodcast = {};
     },
   },
   extraReducers: (builder) => {
