@@ -9,10 +9,12 @@ import {
   incrementAsync,
   incrementIfOdd,
 } from "../../store/slices/counterSlice";
+import { RootState } from "../../store/types";
 import styles from "./Counter.module.css";
 
 export function Counter() {
   const count = useAppSelector(selectCount);
+  const counter = useAppSelector((state: RootState) => state.counter);
   const dispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState("2");
 
@@ -45,6 +47,9 @@ export function Counter() {
         <button className={styles.button} onClick={() => dispatch(incrementIfOdd(incrementValue))}>
           Add If Odd
         </button>
+      </div>
+      <div className={styles.row}>
+        <span className={styles.value}>{counter.status}</span>
       </div>
     </div>
   );

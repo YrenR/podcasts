@@ -2,9 +2,10 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
-import counterReducer from "./slices/counterSlice";
+import counter from "./slices/counterSlice";
+import podcasts from "./slices/podcastSlice";
 
-const reducers = combineReducers({ counter: counterReducer });
+const reducers = combineReducers({ counter, podcasts });
 
 const persistConfig = {
   key: "root",
