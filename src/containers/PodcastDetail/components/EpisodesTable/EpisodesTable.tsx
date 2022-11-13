@@ -17,7 +17,13 @@ interface Props {
 }
 
 const EpisodesTable = ({ episodes, podcastId }: Props) => {
-  const podcastEpisode = episodes?.filter(({ kind }) => kind === "podcast-episode");
+  if (episodes?.length === 0) {
+    return (
+      <Typography flex={1} align="center">
+        No episodes yet
+      </Typography>
+    );
+  }
 
   return (
     <TableContainer>
