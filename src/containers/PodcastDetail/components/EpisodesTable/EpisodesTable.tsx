@@ -30,7 +30,7 @@ const EpisodesTable = ({ episodes, podcastId }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {podcastEpisode?.map(({ trackId, trackName, releaseDate, trackTimeMillis }) => (
+          {episodes?.map(({ trackId, trackName, releaseDate, trackTimeMillis }) => (
             <TableRow key={trackId}>
               <TableCell component="th" scope="row">
                 <Typography component={Link} to={`/podcast/${podcastId}/episode/${trackId}`} color="primary">

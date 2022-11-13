@@ -6,8 +6,8 @@ import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 import { selectEpisodeByPodcastId, selectPodcasts } from "../../selectors";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import PodcastSidebar from "./components/PodcastSidebar/PodcastSidebar";
-import { getEpisodesAsync } from "../../store/slices/podcastSlice";
+import PodcastSidebar from "../../components/PodcastSidebar/PodcastSidebar";
+import { getEpisodesAsync, getTopPodastsAsync } from "../../store/slices/podcastSlice";
 import EpisodesTable from "./components/EpisodesTable/EpisodesTable";
 
 type PodcastDetailParams = { podcastId: string };
@@ -19,7 +19,10 @@ const PodcastDetail = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (podcastId) dispatch(getEpisodesAsync(podcastId));
+    if (podcastId) {
+      dispatch(getTopPodastsAsync());
+      dispatch(getEpisodesAsync(podcastId));
+    }
   }, [dispatch, podcastId]);
 
   const podcasts = topPodcast.response?.feed.entry;
@@ -33,7 +36,7 @@ const PodcastDetail = () => {
       <Grid item xs={12} sm={6} md={8}>
         <Card>
           <CardContent>
-            <Typography fontWeight="bold">Episodes: {episodes?.resultCount}</Typography>
+            <Typography fontWeight="bold">Episodes: {episodes?.results.length}</Typography>
           </CardContent>
         </Card>
         <Card sx={{ marginTop: 5 }}>
