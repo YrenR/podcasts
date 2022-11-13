@@ -2,8 +2,12 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import FiberManualRecordTwoToneIcon from "@mui/icons-material/FiberManualRecordTwoTone";
+import { useAppSelector } from "../../hooks";
+import { selectPodcasts } from "../../selectors";
 
 const Header = () => {
+  const { status } = useAppSelector(selectPodcasts);
+
   return (
     <>
       <AppBar position="static" color="transparent">
@@ -17,7 +21,7 @@ const Header = () => {
           >
             Podcaster
           </Typography>
-          <FiberManualRecordTwoToneIcon color="primary" />
+          {status === "loading" && <FiberManualRecordTwoToneIcon color="primary" />}
         </Toolbar>
       </AppBar>
       <Outlet />
