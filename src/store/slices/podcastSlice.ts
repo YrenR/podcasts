@@ -1,19 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { TopPodcast } from "../../models/podcast";
 import { addMilliseconds, isExpired, ONE_DAY_IN_MILLISECONDS } from "../../tools/util";
-import { getTopPodasts } from "../../httpClients/podcastApi";
-import { selectPodcasts } from "../../selectors";
+import { getEpisodes, getTopPodasts } from "../../httpClients/podcastApi";
+import { selectEpisodes, selectTopPodcasts } from "../../selectors";
+import { Episodes } from "../../models/episode";
 
 export interface PodcastState {
   topPodcast: {
     response?: TopPodcast;
     ttl?: Date;
   };
+  episodes: {
+    [podcastId: string]: Episodes & { ttl: Date };
+  };
   status: "idle" | "loading" | "failed";
 }
 
 const initialState: PodcastState = {
   topPodcast: {},
+  episodes: {},
   status: "idle",
 };
 
@@ -25,8 +30,23 @@ export const getTopPodastsAsync = createAsyncThunk(
   },
   {
     condition: (_, { getState }: { getState: any }) => {
-      const podcasts = selectPodcasts(getState());
-      if (podcasts?.topPodcast?.ttl) return isExpired(podcasts.topPodcast.ttl);
+      const topPodcast = selectTopPodcasts(getState());
+      if (topPodcast?.ttl) return isExpired(topPodcast.ttl);
+      else return true;
+    },
+  },
+);
+
+export const getEpisodesAsync = createAsyncThunk(
+  "podcast/episodes",
+  async (podcastId: string) => {
+    const episodes = await getEpisodes({ podcastId });
+    return { episodes, podcastId };
+  },
+  {
+    condition: (podcastId, { getState }: { getState: any }) => {
+      const episodes = selectEpisodes(getState());
+      if (episodes[podcastId]?.ttl) return isExpired(episodes[podcastId].ttl);
       else return true;
     },
   },
@@ -53,6 +73,22 @@ export const podcastSlice = createSlice({
         };
       })
       .addCase(getTopPodastsAsync.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(getEpisodesAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getEpisodesAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.episodes = {
+          ...state.episodes,
+          [action.payload.podcastId]: {
+            ...action.payload.episodes,
+            ttl: addMilliseconds(new Date(), ONE_DAY_IN_MILLISECONDS),
+          },
+        };
+      })
+      .addCase(getEpisodesAsync.rejected, (state) => {
         state.status = "failed";
       });
   },
