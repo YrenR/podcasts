@@ -4,7 +4,7 @@ export interface TopPodcast {
 
 export interface Feed {
   author: Author;
-  entry: Entry[];
+  entry: PodcastInfo[];
   updated: Updated;
   rights: Rights;
   title: Title;
@@ -26,7 +26,7 @@ export interface Uri {
   label: string;
 }
 
-export interface Entry {
+export interface PodcastInfo {
   "im:name": ImName;
   "im:image": ImImage[];
   summary: Summary;
