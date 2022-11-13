@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { TopPodcast } from "../../models/podcast";
 import { addMilliseconds, isExpired, ONE_DAY_IN_MILLISECONDS } from "../../tools/util";
 import { getTopPodasts } from "../../httpClients/podcastApi";
