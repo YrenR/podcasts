@@ -13,13 +13,15 @@ export const padTo2Digits = (num: number) => {
 };
 
 export const normalizeMillisecondsToMinSec = (milliseconds: number) => {
-  let seconds = Math.floor(milliseconds / 1000);
-  let minutes = Math.floor(seconds / 60);
+  const date = new Date(milliseconds);
+  const seconds = date.getUTCSeconds();
+  const minutes = date.getUTCMinutes();
+  const hours = date.getUTCHours();
 
-  seconds = seconds % 60;
-  minutes = minutes % 60;
+  const normalize = `${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`;
 
-  return `${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`;
+  if (hours > 0) return `${padTo2Digits(hours)}:${normalize}`;
+  else return normalize;
 };
 
 export const formatDateDDMMYYYY = (date: Date) => {
