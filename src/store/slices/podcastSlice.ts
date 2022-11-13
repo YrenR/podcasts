@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TopPodcast } from "../../models/podcast";
 import { addMilliseconds, isExpired, ONE_DAY_IN_MILLISECONDS } from "../../tools/util";
 import { getTopPodasts } from "../../httpClients/podcastApi";
@@ -20,9 +20,8 @@ const initialState: PodcastState = {
 export const getTopPodastsAsync = createAsyncThunk(
   "podcast/toppodcasts",
   async () => {
-    const data = await getTopPodasts({ limit: 100, genre: 1310 });
-    console.log("llamada");
-    return data;
+    const topPodcast = await getTopPodasts({ limit: 100, genre: 1310 });
+    return topPodcast;
   },
   {
     condition: (_, { getState }: { getState: any }) => {
@@ -52,7 +51,6 @@ export const podcastSlice = createSlice({
           response: action.payload,
           ttl: addMilliseconds(new Date(), ONE_DAY_IN_MILLISECONDS),
         };
-        // state.topPodcast.ttl = addMilliseconds(new Date(), ONE_DAY_IN_MILLISECONDS);
       })
       .addCase(getTopPodastsAsync.rejected, (state) => {
         state.status = "failed";
