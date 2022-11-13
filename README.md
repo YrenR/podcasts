@@ -38,7 +38,7 @@ yarn build
 ```
 
 ```
-npm install -g serve
+yarn global add serve
 serve -s build
 ```
 
