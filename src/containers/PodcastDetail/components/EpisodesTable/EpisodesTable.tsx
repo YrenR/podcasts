@@ -8,8 +8,8 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { Episode } from "../../../../models/episode";
-import "./episodesTable.css";
 import { formatDateDDMMYYYY, normalizeMillisecondsToMinSec } from "../../../../tools/util";
+import "./episodesTable.css";
 
 interface Props {
   episodes?: Episode[];
@@ -30,8 +30,8 @@ const EpisodesTable = ({ episodes, podcastId }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {podcastEpisode?.map(({ trackId, trackName, releaseDate, trackTimeMillis, kind, wrapperType }) => (
-            <TableRow key={trackId} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+          {podcastEpisode?.map(({ trackId, trackName, releaseDate, trackTimeMillis }) => (
+            <TableRow key={trackId}>
               <TableCell component="th" scope="row">
                 <Typography component={Link} to={`/podcast/${podcastId}/episode/${trackId}`} color="primary">
                   {trackName}
