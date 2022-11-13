@@ -5,7 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
-import { ImImage, PodcastInfo } from "../../../../models/podcast";
+import { ImImage, PodcastInfo } from "../../models/podcast";
 
 interface Props {
   podcast?: PodcastInfo;

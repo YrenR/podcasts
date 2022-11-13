@@ -41,6 +41,8 @@ export const getEpisodesAsync = createAsyncThunk(
   "podcast/episodes",
   async (podcastId: string) => {
     const episodes = await getEpisodes({ podcastId });
+    episodes?.results.shift();
+
     return { episodes, podcastId };
   },
   {
