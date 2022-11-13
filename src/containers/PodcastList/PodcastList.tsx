@@ -28,7 +28,7 @@ const PodcastList = () => {
     const query = target.value.trim().toLowerCase();
 
     const filtering = podcasts.filter((podcast: PodcastInfo) => {
-      const title = podcast.title.label.toLowerCase();
+      const title = podcast["im:name"].label.toLowerCase();
       const artist = podcast["im:artist"].label.toLowerCase();
       return title.includes(query) || artist.includes(query);
     });

@@ -22,7 +22,7 @@ const PodcastListCard = ({ podcasts, isLoading }: Props) => {
         <PodcastCard
           key={podcast.id.attributes["im:id"]}
           id={podcast.id.attributes["im:id"]}
-          title={podcast.title.label}
+          title={podcast["im:name"].label}
           author={podcast["im:artist"].label}
           images={podcast["im:image"]}
         />

@@ -18,9 +18,9 @@ const PodcastCard = ({ id, title, author, images }: Props) => {
   const getLastUri = () => images.at(-1)?.label;
 
   return (
-    <Grid item xs={12} md={3}>
+    <Grid item xs={12} sm={3}>
       <Box display="flex" flexDirection="column" alignItems="center">
-        <Avatar src={getLastUri()} variant="circular" sx={{ width: 140, height: 140 }} />
+        <Avatar src={getLastUri()} alt={title} variant="circular" sx={{ width: 140, height: 140 }} />
         <Card
           sx={{
             p: 2,
