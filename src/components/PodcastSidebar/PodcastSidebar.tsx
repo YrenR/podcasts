@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import { ImImage, PodcastInfo } from "../../models/podcast";
+import { Link } from "react-router-dom";
 
 interface Props {
   podcast?: PodcastInfo;
@@ -34,7 +35,15 @@ const PodcastSidebar = ({ podcast }: Props) => {
       </CardMedia>
       <CardContent>
         <Divider sx={{ marginBottom: 2 }} />
-        <Typography fontWeight="bold">{podcast["im:name"].label}</Typography>
+        <Typography
+          component={Link}
+          to={`/podcast/${podcast.id.attributes["im:id"]}`}
+          color="text.primary"
+          fontWeight="bold"
+          sx={{ textDecoration: "none" }}
+        >
+          {podcast["im:name"].label}
+        </Typography>
         <Typography variant="body2" fontStyle="italic">
           by {podcast["im:artist"].label}
         </Typography>
