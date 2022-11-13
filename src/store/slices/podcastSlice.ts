@@ -20,9 +20,8 @@ const initialState: PodcastState = {
 export const getTopPodastsAsync = createAsyncThunk(
   "podcast/toppodcasts",
   async () => {
-    const data = await getTopPodasts({ limit: 100, genre: 1310 });
-    console.log("llamada");
-    return data;
+    const topPodcast = await getTopPodasts({ limit: 100, genre: 1310 });
+    return topPodcast;
   },
   {
     condition: (_, { getState }: { getState: any }) => {
@@ -38,7 +37,7 @@ export const podcastSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state = { ...initialState };
+      state.topPodcast = {};
     },
   },
   extraReducers: (builder) => {
@@ -52,7 +51,6 @@ export const podcastSlice = createSlice({
           response: action.payload,
           ttl: addMilliseconds(new Date(), ONE_DAY_IN_MILLISECONDS),
         };
-        // state.topPodcast.ttl = addMilliseconds(new Date(), ONE_DAY_IN_MILLISECONDS);
       })
       .addCase(getTopPodastsAsync.rejected, (state) => {
         state.status = "failed";
