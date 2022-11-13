@@ -1,49 +1,50 @@
-import React, { useEffect, useState, useMemo, ChangeEvent } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { selectPodcasts } from "../../selectors";
 import { getTopPodastsAsync } from "../../store/slices/podcastSlice";
-import PodcastCard from "./components/PodcastCard/PodcastCard";
+
 import Grid from "@mui/material/Grid";
 import { Box, TextField } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import { PodcastInfo } from "../../models/podcast";
+import PodcastListCard from "./components/PodcastListCard/PodcastListCard";
 
 const PodcastList = () => {
   const topPodcasts = useAppSelector(selectPodcasts);
+  const podcasts: PodcastInfo[] = topPodcasts.topPodcast.response?.feed.entry || [];
   const dispatch = useAppDispatch();
-  const [filter, setFilter] = useState("");
+  const [filterPodcast, setFilterPodcast] = useState<PodcastInfo[]>([]);
 
   useEffect(() => {
     dispatch(getTopPodastsAsync());
   }, [dispatch]);
 
+  useEffect(() => {
+    const topPodcastResponse = topPodcasts.topPodcast.response;
+    if (topPodcastResponse) setFilterPodcast(topPodcastResponse.feed.entry);
+  }, [topPodcasts]);
+
   const handlerOnSearching = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    setFilter(target.value.toLowerCase());
+    const query = target.value.trim().toLowerCase();
+
+    const filtering = podcasts.filter((podcast: PodcastInfo) => {
+      const title = podcast.title.label.toLowerCase();
+      const artist = podcast["im:artist"].label.toLowerCase();
+      return title.includes(query) || artist.includes(query);
+    });
+
+    setFilterPodcast(query ? filtering : podcasts);
   };
-
-  const filtered = useMemo(() => {
-    const isIncluded = (title: string, artist: string): boolean => {
-      return title.toLowerCase().includes(filter) || artist.toLowerCase().includes(filter);
-    };
-
-    const podcasts = topPodcasts.topPodcast.response?.feed.entry || [];
-    return podcasts.filter((x) => isIncluded(x.title.label, x["im:artist"].label));
-  }, [topPodcasts.topPodcast, filter]);
 
   return (
     <>
-      <Box display="flex" justifyContent="flex-end" marginTop={4} marginRight={8}>
-        <TextField label="Search" onChange={handlerOnSearching} />
+      <Box display="flex" justifyContent="flex-end" marginTop={4} marginRight={8} alignItems="center">
+        <Chip label={filterPodcast.length} color="primary" sx={{ marginRight: 2 }} />
+        <TextField label="Filter podcasts..." onChange={handlerOnSearching} />
       </Box>
 
       <Grid container spacing={8} padding={8}>
-        {filtered.map((podcast) => (
-          <PodcastCard
-            key={podcast.id.attributes["im:id"]}
-            id={podcast.id.attributes["im:id"]}
-            title={podcast.title.label}
-            author={podcast["im:artist"].label}
-            images={podcast["im:image"]}
-          />
-        ))}
+        <PodcastListCard podcasts={filterPodcast} isLoading={topPodcasts.status === "loading"} />
       </Grid>
     </>
   );
